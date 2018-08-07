@@ -12,7 +12,7 @@ The model is trained on default train settings of inception v3 model. Data is sp
 
 # demo
 
-![logo](https://github.com/divyakrishna-devisetty/Pulses-and-Legumes-classifier/classify.gif)
+https://github.com/divyakrishna-devisetty/Pulses-and-Legumes-classifier/classify.gif
 
 
 
