@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pulses Classifier</title>
+    <style>
+        * {
+            
+            font-family: Georgia;
+            
+        }
+        body{
+            background-image: url(https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=4fa061122a5ce899fcb5454dae8dbe99&auto=format&fit=crop&w=1350&q=80);
+            background-size: cover;
+            
+            
+        }
+        h1{
+            font-family: Georgia;
+            font-size: 30px;   
+            color: pink;
+            border-bottom:2px solid pink;
+            border-right: 2px solid pink;
+            border-left: 2px solid pink;
+            border-top: 2px solid pink;
+            width: 600px;
+            text-align:center;
+            box-shadow: 4px 4px 5px #888888;
+            margin-top:40px ;
+            margin-bottom: 30px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            justify-content: center;
+            background-color: rgba(0,0,255,0.5);
+            display: flex;
+            flex-wrap: wrap;
+                
+        }
+        
+        
+        /* If you want the content centered horizontally and vertically */
+        .centered >input{
+            /*position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-60%, -50%);
+            text-align: left;*/
+            display: none;
+        }
+         
+         .report {
+            position: absolute;
+            top: 85%;
+            left: 30%;
+            transform: translate(-50%, -30%);
+            text-align: left;
+        }
+        .labels{
+            position: absolute;
+            left:55%;
+        }
+       
+        #application{
+                width: 50%;
+                position: relative;
+                transition: background-color .25s ease-in-out;
+                -webkit-box-shadow: inset 0 -10px 50px rgba(0,0,0,0.125);
+                box-shadow: inset 0 -10px 50px rgba(0,0,0,0.125);
+                background-color: rgba(0,0,255,0.5);
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: cover;
+                margin-left: 200px;
+                margin-right: 200px;
+                display: flex;
+                flex-wrap: wrap;
+                padding: 90px 100px 110px 100px;
+
+        }
+        #selected-image{
+            border-bottom:2px solid pink;
+            border-right: 2px solid pink;
+            border-left: 2px solid pink;
+            border-top: 2px solid pink;
+            transition: all 1s;
+        }
+        #selected-image:hover{
+            cursor: pointer;
+            transform: scale3d(1.1,1.1,1.1);
+        }
+        #predict-button:hover{
+            cursor: pointer;
+        }
+
+
+    </style>
+</head>
+<body>
+    <center><h1>Legumes and Pulses Classifier</h1></center>
+    <section id="application" class="application">
+        <div class="centered">
+        <label for="file-input">
+        <img title="choose image to classify" id="selected-image" height="300" width="300" src="cam.png"/>
+        </label>
+        <input id="file-input" type="file" />
+
+    </div>
+   
+    <div class="report">
+        <p>
+            <button title="classify the image" id="predict-button" style="color:black">Predict</button>
+        </p>
+        
+       
+    </div>
+    <div class="labels">
+        <p>Predicted Label: <span id="prediction"></span></p>
+        <p>Probability: <span id="value"></span></p>
+    </div>
+  </section>
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+        let base64Image;
+        $("#file-input").change(function() {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let dataURL = reader.result;
+                $('#selected-image').attr("src", dataURL);
+                base64Image = dataURL.replace("data:image/jpeg;base64,","");
+                console.log($("#file-input")[0].files[0].name);
+            }
+            reader.readAsDataURL($("#file-input")[0].files[0]);
+            $("#prediction").text("");
+            $("#value").text("");
+        });
+        $("#predict-button").click(function(){
+            let message = {
+                image: base64Image
+            }
+            console.log(message);
+            $.post("http://127.0.0.1:5000/predict", JSON.stringify(message), function(response){
+                $("#prediction").text(response.prediction.prediction);
+                $("#value").text(response.prediction.value);
+                console.log(response);
+            });
+        });
+
+</script>
+</body>
+</html>
